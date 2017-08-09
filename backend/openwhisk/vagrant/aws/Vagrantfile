@@ -1,0 +1,172 @@
+###################################################################################################
+# This Vagrantfile derives from the original (https://github.com/apache/incubator-openwhisk/blob/master/tools/vagrant/Vagrantfile)
+# and deploys OpenWhisk into a single AWS VM.  It is dependent on the AWS Vagrant plug in:
+#
+# https://github.com/mitchellh/vagrant-aws
+#
+# As such, before you try to use this file, you need to do the following to install the plugin:
+#
+# vagrant plugin install vagrant-aws
+#
+# And then tell Vagrant about the dummy AWS box:
+#
+# vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+#
+# Further, this file requires the following environment variables be set to drive its behavior:
+#
+# ACCESS_KEY_ID - The AWS access key for the account you'd like to deploy OpenWhisk to
+# SECRET_ACCESS_KEY - The AWS secret key for the account you'd like to deploy OpenWhisk to
+# KEYPAIR_NAME - The name of the keypair from the AWS console used to SSH into the resulting VM
+# PRIVATE_KEY_PATH - Full path to the .pem file for the keypair.  ie: "~/.ssh/fred.pem"
+# AWS_REGION - Name of AWS region to deploy to.  ie: "us-west-2"
+# AWS_AMI - Name of the AMI used to create the VM.  ie: "ami-d94f5aa0"
+# AWS_INSTANCE_TYPE - Name of AWS instance type used to create the VM.  ie: "t2.small" >= t2.small please
+# AWS_SECURITY_GROUP_ID - ID (not name) of the security group applied to the VM.  ie: "sg-XXXXXXXX"
+# AWS_SUBNET_ID - ID of the subnet within the VPC the VM should be created in.  ie: "subnet-XXXXXXX"
+#
+# Be sure to set up the Security Group in such a way that all the ports for OpenWhisk are open should
+# you want to ping the individual services.  The instance type name MUST be t2.small or greater or
+# else the Kafka and Controller components become memory starved.  This will be improved at a later date.
+#
+###################################################################################################
+
+# Require the AWS provider plugin
+require 'vagrant-aws'
+
+MACHINE_IP = '127.0.0.1'
+
+# Create and configure the AWS instance(s)
+Vagrant.configure('2') do |config|
+
+  # Use dummy AWS box
+  config.vm.box = 'aws-dummy'
+
+  # Specify AWS provider configuration
+  config.vm.provider 'aws' do |aws, override|
+    # Read AWS authentication information
+    aws.access_key_id = ENV['ACCESS_KEY_ID']
+    aws.secret_access_key = ENV['SECRET_ACCESS_KEY']
+
+    # Specify SSH keypair to use
+    aws.keypair_name = ENV['KEYPAIR_NAME']
+
+    # Specify region, AMI ID, and security group(s)
+    aws.region = ENV['AWS_REGION']
+    aws.ami = ENV['AWS_AMI']
+    aws.security_groups = [ENV['AWS_SECURITY_GROUP_ID']]
+    aws.instance_type = ENV['AWS_INSTANCE_TYPE']
+	aws.subnet_id = ENV['AWS_SUBNET_ID']
+	aws.associate_public_ip = true
+
+    # Specify username and private key path
+    override.ssh.username = 'ubuntu'
+    override.ssh.private_key_path = ENV['PRIVATE_KEY_PATH']
+  end
+
+  # Prevents "stdin: is not a tty" on Ubuntu (https://github.com/mitchellh/vagrant/issues/1673)
+  config.vm.provision "fix-no-tty", type: "shell" do |s|
+    s.privileged = false
+    s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+  end
+
+  # Install Software
+$script_common = <<SCRIPT
+  set -e
+  set -x
+  echo "`date`: ubuntu-setup-start" >> /tmp/vagrant-times.txt
+  sudo add-apt-repository ppa:git-core/ppa
+  sudo apt-get update
+  sudo apt-get install git -y
+  sudo apt-get install htop
+
+  # Get openwhisk from trunk
+  git clone https://github.com/apache/incubator-openwhisk.git openwhisk
+
+  HOME=/home/ubuntu
+  OPENWHISK_HOME=${HOME}/openwhisk
+  ANSIBLE_HOME=${OPENWHISK_HOME}/ansible
+  ANSIBLE_REMOTE_TEMP=${ANSIBLE_HOME}/tmp
+  # Add Global environments variables
+  # Set remote tmp dir for ansible to fix shared folder problems on Windows
+  echo ANSIBLE_HOME=${ANSIBLE_HOME} >> /etc/environment
+  echo ANSIBLE_REMOTE_TEMP=${ANSIBLE_REMOTE_TEMP} >> /etc/environment
+  echo OPENWHISK_HOME=${OPENWHISK_HOME} >> /etc/environment
+  echo PATH=${PATH}:${HOME}/bin:${OPENWHISK_HOME}/tools/build >> /etc/environment
+
+  cd ${OPENWHISK_HOME}
+  cd tools/ubuntu-setup
+  source all.sh
+  echo "`date`: ubuntu-setup-end" >> /tmp/vagrant-times.txt
+SCRIPT
+
+  config.vm.provision "script_common", type: "shell", keep_color: true, inline: $script_common
+
+  # Configure Default CouchDB
+$couch_db = <<SCRIPT
+  echo "`date`: couchdb-setup-start" >> /tmp/vagrant-times.txt
+  HOME=/home/ubuntu
+  OPENWHISK_HOME=${HOME}/openwhisk
+  export ANSIBLE_REMOTE_TEMP=${OPENWHISK_HOME}/ansible/tmp
+  cd ${OPENWHISK_HOME}/ansible
+  ansible-playbook -i environments/local setup.yml
+  ansible-playbook -i environments/local prereq.yml
+  ansible-playbook -i environments/local couchdb.yml
+  echo "`date`: couchdb-setup-end" >> /tmp/vagrant-times.txt
+SCRIPT
+
+$init_db = <<SCRIPT
+  echo "`date`: init-db-start" >> /tmp/vagrant-times.txt
+  HOME=/home/ubuntu
+  OPENWHISK_HOME=${HOME}/openwhisk
+  export ANSIBLE_REMOTE_TEMP=${OPENWHISK_HOME}/ansible/tmp
+  cd ${OPENWHISK_HOME}/ansible
+  ansible-playbook -i environments/local initdb.yml
+  echo "`date`: init-db-end" >> /tmp/vagrant-times.txt
+SCRIPT
+
+  config.vm.provision "start_couch", type: "shell", keep_color: true, inline: $couch_db
+  config.vm.provision "initdb", type: "shell", keep_color: true, inline: $init_db
+
+  # Build and Deploy
+$script_end = <<SCRIPT
+  set -e
+  set -x
+  echo "`date`: build-start" >> /tmp/vagrant-times.txt
+  HOME=/home/ubuntu
+  OPENWHISK_HOME=${HOME}/openwhisk
+  source /etc/environment
+  # Build OpenWhisk using gradle
+  cd ${OPENWHISK_HOME}
+  ./gradlew  tools:cli:distDocker -PdockerImagePrefix=openwhisk
+
+  echo "`date`: deploy-start" >> /tmp/vagrant-times.txt
+  # Deploy OpenWhisk using ansible
+  cd ${ANSIBLE_HOME}
+  ansible-playbook -i environments/local wipe.yml
+  ansible-playbook -i environments/local apigateway.yml
+  ansible-playbook -i environments/local -e "docker_image_prefix=openwhisk" openwhisk.yml
+  # Comment out postdeploy.yml while catalog deploy is broken on trunk
+  # ansible-playbook -i environments/local postdeploy.yml
+
+  # Setup OpenWhisk CLI
+  mkdir ${HOME}/bin
+  ln -s ${OPENWHISK_HOME}/tools/admin/wskadmin ${HOME}/bin/wskadmin
+  ln -s ${OPENWHISK_HOME}/tools/build/redo ${HOME}/bin/wskdev
+  echo ${OPENWHISK_HOME}/bin/linux/amd64/wsk -i '"$@"' > ${HOME}/bin/wsk
+  chmod +x ${HOME}/bin/wsk
+  PATH=${PATH}:${HOME}/bin
+  echo 'pushd "$(mktemp -d)" > /dev/null && wsk sdk install bashauto > /dev/null && source wsk_cli_bash_completion.sh && popd > /dev/null' >> $HOME/.bashrc
+
+  # Run OpenWhisk CLI
+  touch $HOME/.wskprops
+  # This allows user to see how to configure the wsk cli outside the VM
+  wsk property set --apihost ${WHISK_IP} --namespace guest --auth `cat ${ANSIBLE_HOME}/files/auth.guest`
+  # Comment out hello invoking while catalog deploy is broken on trunk
+  #wsk action invoke /whisk.system/utils/echo -p message hello --result
+  cat ${ANSIBLE_HOME}/files/auth.guest
+  echo "`date`: build-deploy-end" >> /tmp/vagrant-times.txt
+SCRIPT
+
+  config.vm.provision "script_end", type: "shell", keep_color: true, inline: $script_end, env: {"WHISK_IP" => MACHINE_IP}
+
+end

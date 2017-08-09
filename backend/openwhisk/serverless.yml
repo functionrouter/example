@@ -1,0 +1,12 @@
+service: modern
+
+provider:
+  name: openwhisk
+  ignore_certs: true
+
+functions:
+  inventory:
+    handler: inventory.handler
+
+plugins:
+    - serverless-openwhisk

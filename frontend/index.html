@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <style>
+    #idtext {font-family: 'Press Start 2P'; border: 1px solid black; padding: 5px;}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="row">
+    <div class="" align="center"><h3>Function Router Demo</h3></div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="" align="center"><span id="idtext">IDTEXT</span> &nbsp <button id="idtextButton" type="button" class="btn btn-primary">"Scan"</button></div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel panel-default ">
+        <div class="panel-heading" align="center">
+          <button type="button" class="btn btn-primary" id="tradButton">Traditional</button> <a data-toggle="collapse" href="#traditionalConfig"><span class="glyphicon glyphicon-cog"></span></a>
+        </div>
+        <div id="traditionalConfig" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="tradEndpoint">Endpoint:</label>
+              <input type="text" class="form-control" id="tradEndpoint" value="https://d37wf50so7.execute-api.ap-south-1.amazonaws.com/demo/inventory/">
+            </div>
+          </div>
+        </div>
+        <h5>Output:</h5>
+        <pre id="tradOutput"></pre>
+        <h5>Time: <span id="tradTime"></span></h5>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="panel panel-default ">
+        <div class="panel-heading" align="center">
+          <button type="button" class="btn btn-primary" id="functionRouterButton">Function Router</button> <a data-toggle="collapse" href="#functionRouterConfig"><span class="glyphicon glyphicon-cog"></span></a>
+        </div>
+        <div id="functionRouterConfig" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="cfrEndpoint">CFR:</label>
+              <input type="text" class="form-control" id="cfrEndpoint" value="">
+            </div>
+            <div class="form-group">
+              <label for="serviceID">Service ID:</label>
+              <input type="text" class="form-control" id="serviceID" value="">
+            </div>
+            <div class="form-group">
+              <label for="latLoc">Lattitude:</label>
+              <input type="text" class="form-control" id="latLoc" value="">
+            </div>
+            <div class="form-group">
+              <label for="longLoc">Longitude:</label>
+              <input type="text" class="form-control" id="longLoc" value="">
+            </div>
+            <div class="form-group">
+              <label for="eeEndpoint">EE URL:</label>
+              <input type="text" class="form-control" id="eeURL" value="">
+            </div>
+            <div class="form-group">
+              <label for="eeAuthToken">EE AuthToken:</label>
+              <input type="text" class="form-control" id="eeAuthToken" value="">
+            </div>
+          </div>
+        </div>
+        <h5>Output:</h5>
+        <pre id="eeOutput"></pre>
+        <h5>Time: <span id="eeTime"></span></h5>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+   var mockIDs;
+   var tradEndpoint;
+</script>
+<script src="./MOCK_IDs.js"></script>
+<script src="./scan.js"></script>
+<script src="./traditional.js"></script>
+<script src="./location.js"></script>
+<script src="./functionrouter.js"></script>
+</body>
+</html>
