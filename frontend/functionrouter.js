@@ -1,16 +1,42 @@
-function lookup() {
+function get(fieldID) {
+  return document.getElementById(fieldID).value;
+}
 
-  if (document.getElementById('serviceID').value == '' ||
-    document.getElementById('serviceID').value % 2) {
-    document.getElementById('eeAuthToken').value = '';
-    document.getElementById('eeURL').value =
-    'https://3edzjqlej2.execute-api.us-west-1.amazonaws.com/demo/inventory/';
+function set(fieldID, val) {
+  document.getElementById(fieldID).value = val;
+}
+
+function lookup() {
+  if (!get('serviceID') || get('serviceID').value % 2 === 0) {
+    set('eeAuthToken', '');
+    set('eeURL', 'https://3edzjqlej2.execute-api.us-west-1.amazonaws.com/demo/inventory/');
   } else {
-    document.getElementById('eeAuthToken').value = '23bc46b1-71f6-4ed5-8c54-816aa4f8c502:' +
-     '123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP';
-    // Insert your targeted EE URL here
-    document.getElementById('eeURL').value =
-    'https://192.168.0.4/api/v1/namespaces/guest/actions/modern-dev-inventory';
+    let lookupEndpoint = get('cfrEndpoint');
+    const serviceID = get('serviceID');
+    if (lookupEndpoint.slice(-1) !==  '/') {
+      lookupEndpoint += '/';
+    }
+    lookupEndpoint += serviceID + '/';
+    lookupEndpoint += get('functionName') + '?latitude=';
+    lookupEndpoint += encodeURIComponent(get('latLoc')) + '&longitude=';
+    lookupEndpoint += encodeURIComponent(get('longLoc')) + '&accessToken=';
+    lookupEndpoint += encodeURIComponent(get('clientID'));
+
+	var date1 = new Date();
+    $.ajax({
+      type: 'GET',
+      url: lookupEndpoint,
+      crossDomain: true,
+      dataType: 'json',
+      success: function (response) {
+		var date2 = new Date();
+		console.log('Response: ' + JSON.stringify(response, null, 2));
+        console.log('Time: ' + (date2 - date1) + ' ms');
+        set('eeAuthToken', response.auth);
+        set('eeURL', response.url);
+		document.getElementById('eeTime').innerHTML = (date2 - date1) + ' ms';
+      }
+    });
   }
 }
 
@@ -38,14 +64,13 @@ function reorderJson(source) {
 }
 
 $('#functionRouterButton').on('click', function () {
-  if (document.getElementById('eeAuthToken').value == '')
+  if (!get('eeAuthToken'))
     lookup();
 
-  var path  =  document.getElementById('eeURL').value;
+  var path  =  get('eeURL');
+
   console.log('Function Router: ' + path);
   if (path.indexOf('amazonaws') !== -1) {
-    console.log('AWS API Gateway GET');
-    path += document.getElementById('idtext').innerHTML;
     var date1 = new Date();
     $.ajax({
       type: 'GET',
@@ -58,10 +83,8 @@ $('#functionRouterButton').on('click', function () {
         document.getElementById('eeTime').innerHTML = (date2 - date1) + ' ms';
       }
     });
-  } else {
-    console.log('OpenWhisk raw POST');
-    path  += '?blocking=true';
-    var date3 = new Date();
+  } else if (path !='') {
+    var date1 = new Date();
     $.ajax({
       type: 'POST',
       url: path,
@@ -72,18 +95,18 @@ $('#functionRouterButton').on('click', function () {
       dataType: 'json',
       data: '{"id":"' + document.getElementById('idtext').innerHTML + '"}',
       success: function (response) {
-        var date4 = new Date();
+        var date2 = new Date();
         console.log('Response: ' + JSON.stringify(response.response.result, null, 2));
-        console.log('Time: ' + (date4 - date3) + ' ms');
+        console.log('Time: ' + (date2 - date1) + ' ms');
         document.getElementById('eeOutput').innerHTML =
           JSON.stringify(reorderJson(response.response.result), null, 2);
-        document.getElementById('eeTime').innerHTML = (date4 - date3) + ' ms';
+        document.getElementById('eeTime').innerHTML = (date2 - date1) + ' ms';
       },
       failure: function (error) {
         console.log('Fail: ' + error);
       },
     });
+  } else {
+	console.log('hello world');
   }
-  /*
-   */
 });

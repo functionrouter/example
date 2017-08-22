@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <meta charset="UTF-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"></link>
   <style>
     #idtext {font-family: 'Press Start 2P'; border: 1px solid black; padding: 5px;}
   </style>
+  <title>Function Router Inventory Example</title>
 </head>
 <body>
 
 <div class="container">
-
+  <form method="get">
   <div class="row">
-    <div class="" align="center"><h3>Function Router Demo</h3></div>
+    <div class="" align="center"><h3>Function Router Inventory Example</h3></div>
   </div>
   <br/>
   <div class="row">
@@ -32,7 +34,7 @@
           <div class="panel-body">
             <div class="form-group">
               <label for="tradEndpoint">Endpoint:</label>
-              <input type="text" class="form-control" id="tradEndpoint" value="https://d37wf50so7.execute-api.ap-south-1.amazonaws.com/demo/inventory/">
+              <input type="text" class="form-control" id="tradEndpoint" value="">
             </div>
           </div>
         </div>
@@ -50,22 +52,30 @@
           <div class="panel-body">
             <div class="form-group">
               <label for="cfrEndpoint">CFR:</label>
-              <input type="text" class="form-control" id="cfrEndpoint" value="">
+              <input type="text" class="form-control" id="cfrEndpoint" value="https://api.functionrouter.com/lookup">
             </div>
             <div class="form-group">
               <label for="serviceID">Service ID:</label>
               <input type="text" class="form-control" id="serviceID" value="">
             </div>
             <div class="form-group">
-              <label for="latLoc">Lattitude:</label>
-              <input type="text" class="form-control" id="latLoc" value="">
+              <label for="clientID">Client Token:</label>
+              <input type="text" class="form-control" id="clientID" value="">
+            </div>
+            <div class="form-group">
+              <label for="functionName">Function Name:</label>
+              <input type="text" class="form-control" id="functionName" value="inventory">
+            </div>
+            <div class="form-group">
+              <label for="latLoc">Latitude:</label>
+              <input type="text" class="form-control" id="latLoc" value="49.2803251">
             </div>
             <div class="form-group">
               <label for="longLoc">Longitude:</label>
-              <input type="text" class="form-control" id="longLoc" value="">
+              <input type="text" class="form-control" id="longLoc" value="-123.11221820000002">
             </div>
             <div class="form-group">
-              <label for="eeEndpoint">EE URL:</label>
+              <label for="eeURL">EE URL:</label>
               <input type="text" class="form-control" id="eeURL" value="">
             </div>
             <div class="form-group">
@@ -80,7 +90,7 @@
       </div>
     </div>
   </div>
-
+  </form>
 </div>
 <script>
    var mockIDs;

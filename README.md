@@ -13,8 +13,9 @@ The initial steps are as follows:
 * [Register your OpenWhisk Execution Endpoint and Location](docs/openwhisk.md)
 * [Register the OpenWhisk function](docs/functionreg.md)
 * [Register the Client](docs/client.md)
-* [Configure and use the front end with the OpenWisk function](frontend/README.md)
+* [Configure and use the front end](frontend/README.md)
+* [Troubleshooting](docs/Troubleshooting.md)
 
 When completed, your output will look something like this:
 
-![Example Screen](/docs/example.jpg)
+![Example Screen](/docs/final.jpg)

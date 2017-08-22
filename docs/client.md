@@ -9,11 +9,7 @@ On the left menu of the Function Router Console, select "Clients", and then pres
 
 There, enter the name of your client and press "Save".
 
-From the Client List screen, copy the ID field to be used later:
-
-![Client ID](clientID.jpg)
-
-Next, click on the pencil on the far right of your registered client to go to the Edit screen:
+From the Client List screen, click on the pencil on the far right of your registered client to go to the Edit screen:
 
 ![Client token](clientAfter.jpg)
 
