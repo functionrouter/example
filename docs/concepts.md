@@ -25,8 +25,8 @@ Given the newness of the Function Delivery Network concept, it is important to b
 ## Mechanics
 At configuration time, an administrator uses the EveryEdge Function Router Console ([console.functionrouter.com](http://console.functionrouter.com)) to register Functions, EEs, and Client Applications.
 
-![Configuration Time](/config.jpg)
+![Configuration Time](config.jpg)
 
 At runtime, a Client Application that needs certain functionality asks the Function Router where what EE it should contact to run a particular function.  The Function Router will examine the known list of EEs for the Project the Client Application belongs to in order to find the best one.  Upon making this selection, the Function Router will then look at its inventory of Functions to see if that EE already has the function requested.  If it does not, the Function Router will deploy the Function to that EE.  The Function Router will then return the URL to the Client Application to use, which it then does to perform its logic.
 
-![Run Time](/runtime.jpg)
+![Run Time](runtime.jpg)

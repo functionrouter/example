@@ -11,7 +11,7 @@ The demo front end consists of the following:
 
 ## What It Should Look like
 
-![Completed Pipeline](/example.jpg)
+![Completed Pipeline](/docs/example.jpg)
 
 ## How it Works
 Press the "Scan" button to load up a randomly selected ID out of the MOCK_IDs.js file and into the UI.  This is done for you automatically upon page startup so there is always an ID to work with.
