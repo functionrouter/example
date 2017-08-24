@@ -16,6 +16,6 @@ The initial steps are as follows:
 * [Configure and use the front end](frontend/README.md)
 * [Troubleshooting](docs/Troubleshooting.md)
 
-When completed, your output will look something like this:
+When completed, your output will look something like this 5 minute video of the example:
 
-![Example Screen](/docs/final.jpg)
+[![IMAGE ALT TEXT HERE](docs/videothumb.jpg)](https://vimeo.com/230821179)

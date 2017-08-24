@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32a4d969-6514-49cc-b449-d46ac4872837" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/clientid.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/docs/example.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/lambda.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/frontend/openwhisk.md" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/client.md" afterPath="$PROJECT_DIR$/docs/client.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/functionreg.md" afterPath="$PROJECT_DIR$/docs/functionreg.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/README.md" afterPath="$PROJECT_DIR$/frontend/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/functionrouter.js" afterPath="$PROJECT_DIR$/frontend/functionrouter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/index.html" afterPath="$PROJECT_DIR$/frontend/index.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,12 +14,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="0">
-                <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="20" />
+              <first_editor relative-caret-position="270">
+                <caret line="18" column="87" lean-forward="false" selection-start-line="18" selection-start-column="87" selection-end-line="18" selection-end-column="87" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -35,7 +27,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="troubleshooting.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="troubleshooting.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/troubleshooting.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
@@ -87,8 +79,8 @@
         <option value="$PROJECT_DIR$/docs/client.md" />
         <option value="$PROJECT_DIR$/frontend/index.html" />
         <option value="$PROJECT_DIR$/frontend/README.md" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/docs/troubleshooting.md" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -102,7 +94,7 @@
     <handled-path value="$PROJECT_DIR$/backend/openwhisk/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="122" />
+    <option name="x" value="29" />
     <option name="y" value="23" />
     <option name="width" value="1400" />
     <option name="height" value="784" />
@@ -234,15 +226,15 @@
       <updated>1502220444834</updated>
       <workItem from="1502220446308" duration="909000" />
       <workItem from="1502320171117" duration="323000" />
-      <workItem from="1502913572697" duration="7596000" />
+      <workItem from="1502913572697" duration="7941000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8828000" />
+    <option name="totallyTimeSpent" value="9173000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="122" y="23" width="1400" height="784" extended-state="0" />
+    <frame x="29" y="23" width="1400" height="784" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -499,22 +491,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
+    <entry file="file://$PROJECT_DIR$/docs/troubleshooting.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="0">
-            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="20" />
+          <first_editor relative-caret-position="90">
+            <caret line="6" column="367" lean-forward="false" selection-start-line="6" selection-start-column="367" selection-end-line="6" selection-end-column="367" />
             <folding />
           </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/troubleshooting.md">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="90">
-            <caret line="6" column="367" lean-forward="false" selection-start-line="6" selection-start-column="367" selection-end-line="6" selection-end-column="367" />
+          <first_editor relative-caret-position="270">
+            <caret line="18" column="87" lean-forward="false" selection-start-line="18" selection-start-column="87" selection-end-line="18" selection-end-column="87" />
             <folding />
           </first_editor>
           <second_editor />
